@@ -30,8 +30,5 @@ from openerp.tools.translate import _
 class res_partner(orm.Model):
     _inherit = 'res.partner'
     _columns = {
-        'recurring_notes': fields.text(
-            string=_('Recurring Notes'),
-            size=250,
-        ),
+        'recurring_notes': fields.text(string=_('Recurring Notes')),
     }
