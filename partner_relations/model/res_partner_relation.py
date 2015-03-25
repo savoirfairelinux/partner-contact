@@ -53,6 +53,11 @@ class ResPartnerRelation(models.Model):
         auto_join=True,
         ondelete='cascade',
     )
+    any_partner_id = fields.Many2one(
+        'res.partner',
+        string='Partner',
+        compute='_get_any_partner_id',
+    )
     type_id = fields.Many2one(
         'res.partner.relation.type',
         string='Type',
@@ -62,6 +67,13 @@ class ResPartnerRelation(models.Model):
     date_start = fields.Date('Starting date')
     date_end = fields.Date('Ending date')
     active = fields.Boolean('Active', default=True)
+
+    @api.one
+    @api.depends("left_partner_id", "right_partner_id")
+    def _get_any_partner_id(self):
+        """Get any relationship whether the partner is on the right or left
+        """
+        self.any_partner_id = self.left_partner_id + self.right_partner_id
 
     @api.one
     def _on_right_partner(self):
