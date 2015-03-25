@@ -3,10 +3,24 @@
     <data>
 
         <act_window
+            id="action_res_partner_relation"
+            res_model="res.partner.relation"
+            view_mode="tree,form"
+            name="Partner Relations"
+        />
+
+        <menuitem
+            id="menu_res_partner_relation_sales"
+            sequence="2"
+            parent="base.menu_sales"
+            action="action_res_partner_relation"
+        />
+
+        <act_window
             id="action_res_partner_relation_type"
             res_model="res.partner.relation.type"
             view_mode="tree,form"
-            name="Partner relations"
+            name="Partner Relations Types"
         />
 
         <menuitem
