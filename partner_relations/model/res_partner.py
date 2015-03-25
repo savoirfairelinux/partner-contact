@@ -29,23 +29,27 @@ from openerp.osv.expression import is_leaf, AND, OR, FALSE_LEAF
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
+    relation_left_ids = fields.One2many(
+        'res.partner.relation',
+        'left_partner_id',
+        string='Left Relations',
+        selectable=False,
+    )
+    relation_right_ids = fields.One2many(
+        'res.partner.relation',
+        'right_partner_id',
+        string='Right Relations',
+        selectable=False,
+    )
     relation_ids = fields.One2many(
         'res.partner.relation',
         compute='_get_relation_ids',
-        inverse='_set_relation_ids',
-        string='Relations',
+        string='All relations with current partner',
         selectable=False,
     )
     relation_count = fields.Integer(
         'Relation Count',
         compute='_count_relations',
-    )
-    relation_all_ids = fields.One2many(
-        'res.partner.relation.all',
-        'this_partner_id',
-        string='All relations with current partner',
-        auto_join=True,
-        selectable=False,
     )
     search_relation_id = fields.Many2one(
         'res.partner.relation.type.selection',
@@ -71,52 +75,19 @@ class ResPartner(models.Model):
         string='Has relation with a partner in category',
     )
 
-    def _get_relation_ids_select(self):
-        """return the partners' relations as tuple
-        (id, left_partner_id, right_partner_id)"""
-        self._cr.execute(
-            '''select id, left_partner_id, right_partner_id
-            from res_partner_relation
-            where (left_partner_id in %s or right_partner_id in %s)
-            order by ''' + self.env['res.partner.relation']._order,
-            (tuple(self._ids), tuple(self._ids))
-        )
-        return self._cr.fetchall()
-
+    @api.one
+    @api.depends('relation_left_ids', 'relation_right_ids')
     def _get_relation_ids(self):
-        """getter for relation_ids"""
-        result = {i: [] for i in self._ids}
-        # TODO: do a permission test on returned ids
-        for row in self._get_relation_ids_select():
-            if row[1] in result:
-                result[row[1]].append(row[0])
-            if row[2] in result:
-                result[row[2]].append(row[0])
-        return result
-
-    def _set_relation_ids(self, field_value):
-        """setter for relation_ids"""
-        relation_pool = self.env['res.partner.relation']
-        context2 = self._update_context(self._context, self._ids)
-        for value in field_value:
-            if value[0] == 0:
-                relation_pool.with_context(context2).create(value[2])
-            if value[0] == 1:
-                # if we write partner_id_display, we also need to pass
-                # type_selection_id in order to have this write end up on
-                # the correct field
-                relation = relation_pool.browse(value[1])
-                if ('partner_id_display' in value[2] and
-                        'type_selection_id' not in value[2]):
-                    value[2]['type_selection_id'] = relation.type_selection_id
-                relation.with_context(context2).write(value[2])
-            if value[0] == 2:
-                relation_pool.with_context(context2).unlink(value[1])
+        """Compute all relations where current partner is left or right of
+        relation
+        """
+        self.relation_ids = self.relation_left_ids + self.relation_right_ids
 
     @api.one
-    @api.depends('relation_all_ids')
+    @api.depends('relation_ids')
     def _count_relations(self):
-        self.relation_count = len(self.relation_all_ids)
+        """Count the number of relations this partner has for Smart Button"""
+        self.relation_count = len(self.relation_ids)
 
     def _search_relation_id(self, operator, operand):
         result = []
