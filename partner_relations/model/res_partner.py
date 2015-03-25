@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Extend res.partner model'''
+"""Extend res.partner model"""
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
