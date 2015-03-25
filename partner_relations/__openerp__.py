@@ -75,7 +75,6 @@ date.""",
         "data/demo.xml",
     ],
     "data": [
-        "view/res_partner_relation_all.xml",
         'view/res_partner_relation.xml',
         'view/res_partner.xml',
         'view/res_partner_relation_type.xml',
