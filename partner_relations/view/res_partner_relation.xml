@@ -18,10 +18,14 @@
         <record id="tree_res_partner_relation" model="ir.ui.view">
             <field name="model">res.partner.relation</field>
             <field name="arch" type="xml">
-                <tree string="Partner Relations" editable="bottom">
+                <tree string="Partner Relations" editable="bottom"
+                      colors="gray:date_end and date_end &lt; current_date or not active;blue:date_start &gt; current_date">
                     <field name="left_partner_id"/>
                     <field name="type_id" widget="selection"/>
                     <field name="right_partner_id"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="active"/>
                 </tree>
             </field>
         </record>
