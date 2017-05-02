@@ -34,7 +34,7 @@
         'res_partner_view.xml',
     ],
     'demo': [],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': True
 }

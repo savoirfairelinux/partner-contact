@@ -19,21 +19,26 @@
 #
 ##############################################################################
 
-from openerp.osv import orm, fields
+from odoo import fields, models
 
 
-class ResPartner(orm.Model):
+class ResPartner(models.Model):
     """
     Add relation affiliate_ids
     """
     _name = "res.partner"
     _inherit = "res.partner"
 
-    _columns = {
-        'child_ids': fields.one2many(
-            'res.partner', 'parent_id',
-            'Contacts', domain=[('is_company', '=', False)]),
-        'affiliate_ids': fields.one2many(
-            'res.partner', 'parent_id',
-            'Affiliates', domain=[('is_company', '=', True)]),
-    }
+    childs_ids = fields.One2many(
+        'res.partner',
+        'parent_id',
+        'Contacts',
+        domain=[('is_company', '=', False)],
+    )
+
+    affiliate_ids = fields.One2many(
+        'res.partner',
+        'parent_id',
+        'Affiliates',
+        domain=[('is_company', '=', True)],
+    )

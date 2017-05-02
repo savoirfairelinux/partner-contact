@@ -15,7 +15,7 @@
                 <field name="parent_id" position="attributes">
                     <attribute name="attrs"></attribute>
                 </field>
-                <page string="Contacts" position="after">
+                <page name='internal_notes' position="before">
                     <page string="Affiliates" attrs="{'invisible': [('is_company','=',False)]}">
                         <field name="affiliate_ids" context="{'default_parent_id': active_id, 'default_is_company': True}" mode="kanban">
                             <kanban>
@@ -35,7 +35,7 @@
                                 <field name="mobile"/>
                                 <field name="fax"/>
                                 <field name="state_id"/>
-                                <field name="has_image"/>
+                                <!--<field name="has_image"/>-->
                                 <templates>
                                     <t t-name="kanban-box">
                                         <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
@@ -43,20 +43,20 @@
                                             <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">X</a>
                                             <div class="oe_module_vignette">
                                             <a type="open">
-                                                <t t-if="record.has_image.raw_value === true">
-                                                    <img t-att-src="kanban_image('res.partner', 'image', record.id.value, {'preview_image': 'image_small'})" class="oe_avatar oe_kanban_avatar_smallbox"/>
-                                                </t>
+                                                <!--<t t-if="record.has_image.raw_value === true">-->
+                                                    <!--<img t-att-src="kanban_image('res.partner', 'image', record.id.value, {'preview_image': 'image_small'})" class="oe_avatar oe_kanban_avatar_smallbox"/>-->
+                                                <!--</t>-->
                                                 <t t-if="record.image and record.image.raw_value !== false">
                                                     <img t-att-src="'data:image/png;base64,'+record.image.raw_value" class="oe_avatar oe_kanban_avatar_smallbox"/>
                                                 </t>
-                                                <t t-if="record.has_image.raw_value === false and (!record.image or record.image.raw_value === false)">
-                                                    <t t-if="record.is_company.raw_value === true">
-                                                        <img t-att-src='_s + "/base/static/src/img/company_image.png"' class="oe_kanban_image oe_kanban_avatar_smallbox"/>
-                                                    </t>
-                                                    <t t-if="record.is_company.raw_value === false">
-                                                        <img t-att-src='_s + "/base/static/src/img/avatar.png"' class="oe_kanban_image oe_kanban_avatar_smallbox"/>
-                                                    </t>
-                                                </t>
+                                                <!--<t t-if="record.has_image.raw_value === false and (!record.image or record.image.raw_value === false)">-->
+                                                    <!--<t t-if="record.is_company.raw_value === true">-->
+                                                        <!--<img t-att-src='_s + "/base/static/src/img/company_image.png"' class="oe_kanban_image oe_kanban_avatar_smallbox"/>-->
+                                                    <!--</t>-->
+                                                    <!--<t t-if="record.is_company.raw_value === false">-->
+                                                        <!--<img t-att-src='_s + "/base/static/src/img/avatar.png"' class="oe_kanban_image oe_kanban_avatar_smallbox"/>-->
+                                                    <!--</t>-->
+                                                <!--</t>-->
                                             </a>
                                                 <div class="oe_module_desc">
                                                     <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_color_border">
